@@ -1,0 +1,129 @@
+openapi: 3.0.4
+info:
+  title: Person API
+  description: |
+    This is my description
+  contact:
+    email: misael.pereira.dev@outlook.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: persons
+    description: operations related to a person
+
+paths:
+  /persons:
+    get:
+      summary: Get list of persons
+      operationId: getPersons
+      responses:
+        '200':
+          description: List of persons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonDto'
+
+    post:
+      summary: Create a new person
+      operationId: createPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '201':
+          description: Person created
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+
+  /persons/{person-id}:
+    get:
+      summary: Get person by ID
+      operationId: getPerson
+      parameters:
+        - in: path
+          name: person-id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Found person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+        '404':
+          description: Person not found
+
+    put:
+      summary: Update a person
+      operationId: updatePerson
+      parameters:
+        - in: path
+          name: person-id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '204':
+          description: Person updated
+        '404':
+          description: Person not found
+
+    delete:
+      summary: Delete a person
+      operationId: deletePerson
+      parameters:
+        - in: path
+          name: person-id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Person deleted
+        '404':
+          description: Person not found
+
+components:
+  schemas:
+    PersonDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: John Doe
+        age:
+          type: integer
+          example: 30
+        isStudent:
+          type: boolean
+          example: false
+      required:
+        - id
+        - name
+        - age
+        - isStudent
